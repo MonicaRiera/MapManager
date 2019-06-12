@@ -5,6 +5,7 @@ import androidx.fragment.app.FragmentActivity;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -42,6 +43,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         btsMap = googleMap;
 
+        btsMap.getUiSettings().setZoomControlsEnabled(true);
+        //btsMap.setMyLocationEnabled(true);
+        btsMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+
         // Add a marker in Sydney and move the camera
         LatLng sydney = new LatLng(-34, 151);
         LatLng barcelona = new LatLng(41.38, 2.17);
@@ -53,6 +58,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onMapClick(LatLng latLng) {
                 createMarkerOnSpot(latLng);
+                moveCameraToSpot(latLng);
             }
         });
         btsMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
@@ -69,6 +75,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 marker.hideInfoWindow();
             }
         });
+    }
+
+    private void moveCameraToSpot(LatLng latLng) {
+        btsMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
     }
 
     private boolean showToastAboutMarker(Marker marker) {
